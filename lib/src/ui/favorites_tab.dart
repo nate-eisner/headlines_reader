@@ -4,6 +4,8 @@ import 'package:news_reader/src/bloc/favorites/bloc.dart';
 import 'package:news_reader/src/ui/news_list.dart';
 
 class FavoritesTab extends StatefulWidget {
+  FavoritesTab() : super(key: Key('FavoritesTab'));
+
   @override
   _FavoritesTabState createState() => _FavoritesTabState();
 }
@@ -26,6 +28,7 @@ class _FavoritesTabState extends State<FavoritesTab>
       builder: (context, state) {
         if (state is HasFavoritesState) {
           return NewsList(
+            key: Key('favorites list'),
             news: state.news,
             isFavorites: true,
           );

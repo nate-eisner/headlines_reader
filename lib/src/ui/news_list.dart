@@ -52,6 +52,7 @@ class __NewsItemState extends State<_NewsItem> with TickerProviderStateMixin {
 
   TextStyle get subTextStyle => Theme.of(context).textTheme.caption;
   bool expanded = false;
+
   String get heroTag => widget.heroTag + article.title;
 
   @override
@@ -59,6 +60,20 @@ class __NewsItemState extends State<_NewsItem> with TickerProviderStateMixin {
     return Column(
       children: <Widget>[
         ListTile(
+          leading: article.urlToImage != null
+              ? Hero(
+                  tag: heroTag + 'image',
+                  child: CachedNetworkImage(
+                      imageUrl: article.urlToImage,
+                      fit: BoxFit.contain,
+                      width: 90,
+                      placeholder: (context, url) =>
+                          CircularProgressIndicator(),
+                      errorWidget: (context, url, error) => Icon(Icons.error)))
+              : Container(
+                  height: 0,
+                  width: 0,
+                ),
           title: Hero(
             child:
                 Text(article.title, style: Theme.of(context).textTheme.body1),
@@ -127,19 +142,6 @@ class __NewsItemState extends State<_NewsItem> with TickerProviderStateMixin {
           children: <Widget>[
             expanded
                 ? ListTile(
-                    leading: article.urlToImage != null
-                        ? CachedNetworkImage(
-                            imageUrl: article.urlToImage,
-                            fit: BoxFit.contain,
-                            width: 90,
-                            placeholder: (context, url) =>
-                                CircularProgressIndicator(),
-                            errorWidget: (context, url, error) =>
-                                Icon(Icons.error))
-                        : Container(
-                            height: 0,
-                            width: 0,
-                          ),
                     subtitle: Text(
                       article.description,
                       style: subTextStyle,

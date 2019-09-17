@@ -1,16 +1,21 @@
 # news_reader
 
-A new Flutter project.
+[[https://github.com/nate-eisner/repository/blob/master/images/news.png|alt=news_reader]]
 
-## Getting Started
+A simple news reader that allows you to cache and favorite news
+headlines from [News API](https://newsapi.org/)
 
-This project is a starting point for a Flutter application.
+## How to run App
 
-A few resources to get you started if this is your first Flutter project:
+1. [Install & Setup Flutter](https://flutter.dev/docs/get-started/install)
+2. To run this on a connected device, Android emulator, or iOS simulator you can use the 
+Flutter CLI `flutter run` or the run option from your Flutter supported IDE of choice
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## How to run Unit & Widget Tests
+
+1. [Install & Setup Flutter](https://flutter.dev/docs/get-started/install)
+2. Use `flutter test` to run all unit and widget tests
+
+## How to run Integration Tests
+// TODO

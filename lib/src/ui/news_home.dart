@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_reader/src/bloc/news/news_bloc.dart';
 import 'package:news_reader/src/bloc/news/news_event.dart';
 import 'package:news_reader/src/ui/favorites_tab.dart';
-import 'package:news_reader/src/ui/news_feed_tab.dart';
+import 'package:news_reader/src/ui/headlines_tab.dart';
 
 class NewsHome extends StatefulWidget {
   @override
@@ -16,10 +16,11 @@ class _NewsHomeState extends State<NewsHome>
   int _currentIndex = 0;
 
   List<BottomNavigationBarItem> _tabs = [
-    BottomNavigationBarItem(icon: Icon(Icons.rss_feed), title: Text('News')),
+    BottomNavigationBarItem(
+        icon: Icon(Icons.rss_feed), title: Text('Headlines')),
     BottomNavigationBarItem(icon: Icon(Icons.star), title: Text('Favorites')),
   ];
-  List<Widget> _pages = [NewsFeedTab(), FavoritesTab()];
+  List<Widget> _pages = [HeadlinesTab(), FavoritesTab()];
   List<String> _titles = ['Headlines', 'Favorites'];
 
   @override
@@ -42,6 +43,7 @@ class _NewsHomeState extends State<NewsHome>
         actions: <Widget>[
           if (_currentIndex == 0)
             IconButton(
+              key: Key('refresh'),
               icon: Icon(Icons.sync),
               onPressed: () {
                 BlocProvider.of<NewsBloc>(context).dispatch(GetHeadlines(true));
@@ -62,7 +64,8 @@ class _NewsHomeState extends State<NewsHome>
         currentIndex: _currentIndex,
         fixedColor: Theme.of(context).accentColor,
         unselectedItemColor: Theme.of(context).accentColor.withAlpha(150),
-        showSelectedLabels: false,
+        showUnselectedLabels: true,
+        showSelectedLabels: true,
         onTap: (index) {
           _controller.animateToPage(index,
               curve: Curves.linear,

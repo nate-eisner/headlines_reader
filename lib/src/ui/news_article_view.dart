@@ -27,25 +27,27 @@ class _NewsArticleState extends State<NewsArticle>
             child: Wrap(
               children: <Widget>[
                 widget.article.urlToImage != null
-                    ? CachedNetworkImage(
-                        imageUrl: widget.article.urlToImage,
-                        imageBuilder: (context, imageProvider) => Container(
-                              constraints: BoxConstraints(maxHeight: 225),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(12),
-                                  topRight: Radius.circular(12),
+                    ? Hero(
+                        tag: widget.heroTag + 'image',
+                        child: CachedNetworkImage(
+                            imageUrl: widget.article.urlToImage,
+                            imageBuilder: (context, imageProvider) => Container(
+                                  constraints: BoxConstraints(maxHeight: 225),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(12),
+                                      topRight: Radius.circular(12),
+                                    ),
+                                    image: DecorationImage(
+                                      image: imageProvider,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
                                 ),
-                                image: DecorationImage(
-                                  image: imageProvider,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                        placeholder: (context, url) =>
-                            Center(child: CircularProgressIndicator()),
-                        errorWidget: (context, url, error) =>
-                            Center(child: Icon(Icons.error)))
+                            placeholder: (context, url) =>
+                                Center(child: CircularProgressIndicator()),
+                            errorWidget: (context, url, error) =>
+                                Center(child: Icon(Icons.error))))
                     : Container(
                         height: 0,
                         width: 0,
