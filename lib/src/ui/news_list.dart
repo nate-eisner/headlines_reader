@@ -25,13 +25,14 @@ class _NewsListState extends State<NewsList> {
     return CustomScrollView(
       slivers: <Widget>[
         SliverList(
+            key: Key('News List'),
             delegate: SliverChildBuilderDelegate(
-          (context, index) => _NewsItem(
-            article: widget.news[index],
-            heroTag: widget.isFavorites ? 'fav' : '',
-          ),
-          childCount: widget.news.length,
-        )),
+              (context, index) => _NewsItem(
+                article: widget.news[index],
+                heroTag: widget.isFavorites ? 'fav' : '',
+              ),
+              childCount: widget.news.length,
+            )),
       ],
     );
   }

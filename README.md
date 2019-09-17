@@ -1,6 +1,6 @@
 # news_reader
 
-[[https://github.com/nate-eisner/repository/blob/master/images/news.png|alt=news_reader]]
+![news_reader](images/news.png)
 
 A simple news reader that allows you to cache and favorite news
 headlines from [News API](https://newsapi.org/)
