@@ -9,7 +9,7 @@ class NewsApi {
           baseUrl: config.baseUrl,
           headers: {'X-Api-Key': config.apiKey},
         ))
-          ..interceptors.add(LogInterceptor(responseBody: true));
+          ..interceptors.add(LogInterceptor());
 
   /// headlines
   /// https://newsapi.org/v2/top-headlines?country=us

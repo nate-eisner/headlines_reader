@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:news_reader/src/config.dart';
 import 'package:news_reader/src/service/news_service.dart';
 
 import './bloc.dart';
@@ -9,7 +8,7 @@ import './bloc.dart';
 class NewsBloc extends Bloc<NewsEvent, NewsState> {
   final NewsService _newsService;
 
-  NewsBloc(Config config) : _newsService = NewsService(config);
+  NewsBloc(NewsService service) : _newsService = service;
 
   @override
   NewsState get initialState => InitialNewsState();
@@ -19,13 +18,20 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
     NewsEvent event,
   ) async* {
     if (event is GetHeadlines) {
-      yield NewsLoadingState();
-      try {
-        var news = await _newsService.getHeadlines();
+      if (event.hardRefresh) {
+        yield NewsLoadingState();
+        try {
+          var news = await _newsService.getHeadlines();
+          yield HasNewsState(news);
+        } catch (e) {
+          yield NewsErrorState();
+          // return cached news as fail safe
+          var news = await _newsService.getCachedHeadlines();
+          yield HasNewsState(news);
+        }
+      } else {
+        var news = await _newsService.getCachedHeadlines();
         yield HasNewsState(news);
-      } catch (e) {
-        print(e);
-        yield NewsErrorState();
       }
     }
   }

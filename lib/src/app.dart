@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news_reader/src/bloc/favorites/favorites_bloc.dart';
 import 'package:news_reader/src/bloc/news/news_bloc.dart';
 import 'package:news_reader/src/config.dart';
-import 'package:news_reader/src/ui/feed/news_feed_page.dart';
+import 'package:news_reader/src/service/news_service.dart';
+import 'package:news_reader/src/ui/news_home.dart';
 
 class MyApp extends StatefulWidget {
   final Config config;
@@ -27,7 +29,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       darkTheme: ThemeData(
         brightness: Brightness.dark,
-        primarySwatch: Colors.orange,
+        accentColor: Colors.orange,
       ),
       theme: ThemeData(
         brightness: Brightness.light,
@@ -39,19 +41,23 @@ class _MyAppState extends State<MyApp> {
 }
 
 class _Home extends StatelessWidget {
-  final Config config;
+  final NewsService newsService;
 
-  _Home(this.config);
+  _Home(Config config) : newsService = NewsService(config);
 
   @override
   Widget build(BuildContext context) {
+    var newsBloc = NewsBloc(newsService);
     return MultiBlocProvider(
       providers: [
         BlocProvider<NewsBloc>(
-          builder: (_) => NewsBloc(config),
+          builder: (_) => newsBloc,
         ),
+        BlocProvider<FavoritesBloc>(
+          builder: (_) => FavoritesBloc(newsService, newsBloc),
+        )
       ],
-      child: NewsFeedPage(),
+      child: NewsHome(),
     );
   }
 }
