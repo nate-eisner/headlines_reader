@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import io.eisner.news_reader.data.Article
 
 @Dao
 interface ArticleDao {

@@ -21,7 +21,9 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
       if (event.hardRefresh) {
         yield NewsLoadingState();
         try {
-          var news = await _newsService.getHeadlines();
+          var news = await _newsService.getCachedHeadlines();
+          yield HasNewsState(news);
+          news = await _newsService.getHeadlines();
           yield HasNewsState(news);
         } catch (e) {
           yield NewsErrorState();

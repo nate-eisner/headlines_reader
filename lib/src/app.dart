@@ -10,75 +10,90 @@ import 'package:news_reader/src/data/sql/database.dart';
 import 'package:news_reader/src/service/api/news_api.dart';
 import 'package:news_reader/src/service/news_service.dart';
 import 'package:news_reader/src/ui/news_home.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'bloc/preferences/bloc.dart';
 
 const syncChannel = const MethodChannel('io.eisner.new_reader');
 
 class MyApp extends StatefulWidget {
   final Config config;
+  final NewsService newsService;
 
-  const MyApp({Key key, this.config}) : super(key: key);
+  MyApp({Key key, this.config})
+      : newsService = NewsService(
+          newsApi: NewsApi.withConfig(config),
+          db: database(),
+          imageCacheManager: DefaultCacheManager(),
+        ),
+        super(key: key);
 
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  @override
-  void initState() {
-    super.initState();
-    database();
+  NewsBloc _newsBloc;
+  PreferencesBloc _preferencesBloc;
+
+  _startSync() {
     syncChannel.invokeMethod('sync', {
-      'timeInSeconds': 30,
+      'timeInSeconds': widget.config.syncDelaySeconds,
       'apiKey': widget.config.apiKey,
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'News Reader',
-      debugShowCheckedModeBanner: false,
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
-        accentColor: Colors.orange,
-      ),
-      theme: ThemeData(
-        brightness: Brightness.light,
-        primarySwatch: Colors.amber,
-      ),
-      home: _Home(widget.config),
-    );
+  _stopSync() {
+    syncChannel.invokeMethod('stop');
   }
-}
 
-class _Home extends StatelessWidget {
-  final NewsService newsService;
-
-  _Home(Config config)
-      : newsService = NewsService(
-          newsApi: NewsApi.withConfig(config),
-          db: database(),
-          imageCacheManager: DefaultCacheManager(),
-        );
+  @override
+  void initState() {
+    super.initState();
+    database();
+    _newsBloc = NewsBloc(widget.newsService);
+    _preferencesBloc = PreferencesBloc(SharedPreferences.getInstance());
+  }
 
   @override
   Widget build(BuildContext context) {
-    var newsBloc = NewsBloc(newsService);
-    syncChannel.setMethodCallHandler((call) async {
-      if (call.method == 'syncSuccess') {
-        newsBloc.dispatch(GetHeadlines(false));
-      }
-    });
     return MultiBlocProvider(
       providers: [
         BlocProvider<NewsBloc>(
-          builder: (_) => newsBloc,
+          builder: (_) => _newsBloc,
         ),
         BlocProvider<FavoritesBloc>(
-          builder: (_) => FavoritesBloc(newsService, newsBloc),
-        )
+          builder: (_) => FavoritesBloc(widget.newsService, _newsBloc),
+        ),
+        BlocProvider<PreferencesBloc>(
+          builder: (_) => _preferencesBloc,
+        ),
       ],
-      child: NewsHome(),
+      child: MaterialApp(
+        title: 'News Reader',
+        debugShowCheckedModeBanner: false,
+        darkTheme: ThemeData(
+          brightness: Brightness.dark,
+          accentColor: Colors.orange,
+        ),
+        theme: ThemeData(
+          brightness: Brightness.light,
+          primarySwatch: Colors.deepOrange,
+        ),
+        home: BlocListener(
+            bloc: _preferencesBloc,
+            listener: (context, state) {
+              if (state is SyncSettingChangedState) {
+                print('SYNC CHANGED TO ${state.isOn}');
+                if (state.isOn) {
+                  _startSync();
+                } else {
+                  _stopSync();
+                }
+              }
+            },
+            child: NewsHome()),
+      ),
     );
   }
 }
