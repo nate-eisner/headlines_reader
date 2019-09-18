@@ -5,7 +5,7 @@ import 'package:news_reader/src/bloc/favorites/bloc.dart';
 import 'package:news_reader/src/bloc/news/news_bloc.dart';
 import 'package:news_reader/src/ui/news_home.dart';
 
-import '../../widget_test_utils.dart';
+import '../../test_utils.dart';
 
 void main() {
   MockNewsBloc mockNewsBloc;

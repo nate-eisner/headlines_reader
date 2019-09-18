@@ -4,6 +4,7 @@ import 'package:news_reader/src/bloc/favorites/bloc.dart';
 import 'package:news_reader/src/bloc/news/news_bloc.dart';
 import 'package:news_reader/src/service/api/news_api.dart';
 import 'package:news_reader/src/service/news_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
 class MockNewsBloc extends Mock implements NewsBloc {}
@@ -17,3 +18,5 @@ class MockNewsApi extends Mock implements NewsApi {}
 class MockDatabase extends Mock implements Database {}
 
 class MockImageCacheManager extends Mock implements BaseCacheManager {}
+
+class MockSharedPreferences extends Mock implements SharedPreferences {}

@@ -5,7 +5,7 @@ import 'package:mockito/mockito.dart';
 import 'package:news_reader/src/bloc/favorites/bloc.dart';
 import 'package:news_reader/src/ui/favorites_tab.dart';
 
-import '../../widget_test_utils.dart';
+import '../../test_utils.dart';
 
 void main() {
   MockFavoritesBloc mockFavoritesBloc;

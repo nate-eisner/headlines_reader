@@ -54,7 +54,7 @@ class NewsService {
 
   Future<List<Article>> getCachedHeadlines() async {
     final db = await _database;
-    final List<Map<String, dynamic>> maps = await db.query(cacheTable);
+    final List<Map<String, dynamic>> maps = await db.query(articlesTable);
     var list = List.generate(maps.length, (i) {
       return Article.fromDB(maps[i]);
     });
@@ -72,7 +72,7 @@ class NewsService {
 
   Future<void> saveArticle(Article article, [bool isCache = false]) async {
     final db = await _database;
-    await db.insert(isCache ? cacheTable : favoritesTable, article.toDBMap());
+    await db.insert(isCache ? articlesTable : favoritesTable, article.toDBMap());
     await _imageCacheManager.downloadFile(article.urlToImage);
   }
 
@@ -84,7 +84,7 @@ class NewsService {
 
   _cacheHeadLines(Iterable<Article> news) async {
     final db = await _database;
-    db.delete(cacheTable);
+    db.delete(articlesTable);
     news.forEach((article) {
       saveArticle(article, true);
     });

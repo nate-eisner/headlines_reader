@@ -1,9 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_reader/src/bloc/news/news_bloc.dart';
 import 'package:news_reader/src/bloc/news/news_event.dart';
 import 'package:news_reader/src/ui/favorites_tab.dart';
 import 'package:news_reader/src/ui/headlines_tab.dart';
+import 'package:news_reader/src/ui/preferences.dart';
 
 class NewsHome extends StatefulWidget {
   @override
@@ -42,12 +44,31 @@ class _NewsHomeState extends State<NewsHome>
         title: Text(_titles[_currentIndex]),
         actions: <Widget>[
           if (_currentIndex == 0)
-            IconButton(
-              key: Key('refresh'),
-              icon: Icon(Icons.sync),
-              onPressed: () {
-                BlocProvider.of<NewsBloc>(context).dispatch(GetHeadlines(true));
-              },
+            Tooltip(
+              message: 'Refresh Headlines',
+              child: IconButton(
+                key: Key('refresh'),
+                icon: Icon(Icons.sync),
+                onPressed: () {
+                  BlocProvider.of<NewsBloc>(context)
+                      .dispatch(GetHeadlines(true));
+                },
+              ),
+            ),
+          if (Theme.of(context).platform == TargetPlatform.android)
+            Tooltip(
+              message: 'Preferences',
+              child: IconButton(
+                key: Key('preferences'),
+                icon: Icon(Icons.settings),
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (_) => SimpleDialog(
+                            children: <Widget>[Preferences()],
+                          ));
+                },
+              ),
             ),
         ],
       ),

@@ -5,7 +5,7 @@ import 'package:mockito/mockito.dart';
 import 'package:news_reader/src/bloc/news/news_bloc.dart';
 import 'package:news_reader/src/ui/headlines_tab.dart';
 
-import '../../widget_test_utils.dart';
+import '../../test_utils.dart';
 
 void main() {
   MockNewsService mockNewsService;
@@ -25,22 +25,27 @@ void main() {
   });
 
   testWidgets('init should request headlines', (WidgetTester tester) async {
+    when(mockNewsService.getCachedHeadlines())
+        .thenAnswer((_) => Future.value([]));
+    when(mockNewsService.getHeadlines()).thenAnswer((_) => Future.value([]));
     await tester.runAsync(() async {
       await tester.pumpWidget(testWidget);
-
+      await tester.pump();
       verify(mockNewsService.getHeadlines()).called(1);
     });
   });
 
   testWidgets('headlines error', (WidgetTester tester) async {
     await tester.runAsync(() async {
+      when(mockNewsService.getCachedHeadlines())
+          .thenAnswer((_) => Future.value([]));
       when(mockNewsService.getHeadlines()).thenThrow('error');
       await tester.pumpWidget(testWidget);
       await Future.delayed(Duration(milliseconds: 200));
       await tester.pumpAndSettle();
 
       expect(find.byKey(Key('snackbar-error')), findsOneWidget);
-      verify(mockNewsService.getCachedHeadlines()).called(1);
+      verify(mockNewsService.getCachedHeadlines()).called(2);
     });
   });
 }

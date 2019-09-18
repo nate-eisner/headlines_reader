@@ -1,21 +1,24 @@
-# news_reader
-
 ![news_reader](images/news.png)
 
+# Headlines Reader
 A simple news reader that allows you to cache and favorite news
 headlines from [News API](https://newsapi.org/)
 
-## How to run App
+*Android support for background syncing to a shared sqlite database via
+Room and WorkManager*
 
-1. [Install & Setup Flutter](https://flutter.dev/docs/get-started/install)
-2. To run this on a connected device, Android emulator, or iOS simulator you can use the 
-Flutter CLI `flutter run` or the run option from your Flutter supported IDE of choice
+### Running the App
+
+* [Install & Setup Flutter](https://flutter.dev/docs/get-started/install)
+
+* Get an API key from [News API](https://newsapi.org/) and included it
+  in the [Config](lib/src/config.dart)
+
+* To run this on a connected device, Android emulator, or iOS simulator
+you can use the Flutter CLI `flutter run` or the run option from your
+Flutter supported IDE of choice
 
 
-## How to run Unit & Widget Tests
+#### Run Unit & Widget Tests
 
-1. [Install & Setup Flutter](https://flutter.dev/docs/get-started/install)
-2. Use `flutter test` to run all unit and widget tests
-
-## How to run Integration Tests
-// TODO
+* Use `flutter test` to run all unit and widget tests
