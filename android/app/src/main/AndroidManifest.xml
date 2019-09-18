@@ -5,7 +5,7 @@
     <application
         android:name=".NewsApp"
         android:icon="@mipmap/ic_launcher"
-        android:label="news_reader">
+        android:label="Headlines">
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
