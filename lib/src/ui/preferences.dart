@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_reader/src/bloc/preferences/bloc.dart';
 
-class PreferencesPage extends StatefulWidget {
+class Preferences extends StatefulWidget {
   @override
-  _PreferencesPageState createState() => _PreferencesPageState();
+  _PreferencesState createState() => _PreferencesState();
 }
 
-class _PreferencesPageState extends State<PreferencesPage> {
+class _PreferencesState extends State<Preferences> {
   PreferencesBloc _preferencesBloc;
 
   @override
@@ -20,62 +20,44 @@ class _PreferencesPageState extends State<PreferencesPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.all(24),
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(12))),
-      child: Stack(fit: StackFit.expand, children: <Widget>[
-        Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Container(
-                height: 24,
+    return Container(
+      width: 300,
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              title: Text('Headlines Background Sync'),
+              subtitle: Text(
+                  'This schedules a background sync of the headlines every 15 minutes'),
+              trailing: BlocBuilder(
+                bloc: _preferencesBloc,
+                builder: (context, state) {
+                  if (state is CurrentSyncSettingState ||
+                      state is SyncSettingChangedState)
+                    return Switch.adaptive(
+                        value: state.isOn,
+                        onChanged: (val) {
+                          _preferencesBloc.dispatch(ToggleSync(val));
+                        });
+                  return Container(
+                    height: 0,
+                    width: 0,
+                  );
+                },
               ),
-              ListTile(
-                title: Text('Headlines Background Sync'),
-                subtitle: Text(
-                    'This schedules a background sync of the headlines every 15 minutes'),
-                trailing: BlocBuilder(
-                  bloc: _preferencesBloc,
-                  builder: (context, state) {
-                    if (state is CurrentSyncSettingState ||
-                        state is SyncSettingChangedState)
-                      return Switch.adaptive(
-                          value: state.isOn,
-                          onChanged: (val) {
-                            _preferencesBloc.dispatch(ToggleSync(val));
-                          });
-                    return Container(
-                      height: 0,
-                      width: 0,
-                    );
-                  },
+            ),
+            ButtonBar(
+              children: <Widget>[
+                FlatButton(
+                  child: const Text('CLOSE'),
+                  onPressed: () => Navigator.of(context).pop(),
                 ),
-              )
-            ],
-          ),
+              ],
+            ),
+          ],
         ),
-        Positioned(
-          right: 0,
-          child: Container(
-            margin: EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(
-                Radius.circular(12),
-              ),
-              color: Theme.of(context).accentColor,
-            ),
-            child: IconButton(
-              color: Colors.white,
-              icon: Icon(Icons.close),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ),
-        )
-      ]),
+      ),
     );
   }
 }

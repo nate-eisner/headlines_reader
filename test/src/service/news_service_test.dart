@@ -5,7 +5,7 @@ import 'package:news_reader/src/data/article.dart';
 import 'package:news_reader/src/service/api/news_response.dart';
 import 'package:news_reader/src/service/news_service.dart';
 
-import '../../widget_test_utils.dart';
+import '../../test_utils.dart';
 
 void main() {
   MockNewsApi mockNewsApi;

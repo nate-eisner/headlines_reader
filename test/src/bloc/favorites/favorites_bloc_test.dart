@@ -3,7 +3,7 @@ import 'package:mockito/mockito.dart';
 import 'package:news_reader/src/bloc/favorites/bloc.dart';
 import 'package:news_reader/src/data/article.dart';
 
-import '../../../widget_test_utils.dart';
+import '../../../test_utils.dart';
 
 void main() {
   MockNewsService mockNewsService;

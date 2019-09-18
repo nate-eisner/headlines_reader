@@ -22,7 +22,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
         yield NewsLoadingState();
         try {
           var news = await _newsService.getCachedHeadlines();
-          yield HasNewsState(news);
+          if (news.isNotEmpty) yield HasNewsState(news);
           news = await _newsService.getHeadlines();
           yield HasNewsState(news);
         } catch (e) {

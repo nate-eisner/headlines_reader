@@ -63,7 +63,10 @@ class _NewsHomeState extends State<NewsHome>
                 icon: Icon(Icons.settings),
                 onPressed: () {
                   showDialog(
-                      context: context, builder: (_) => PreferencesPage());
+                      context: context,
+                      builder: (_) => SimpleDialog(
+                            children: <Widget>[Preferences()],
+                          ));
                 },
               ),
             ),

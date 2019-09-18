@@ -19,7 +19,6 @@ class PreferencesBloc extends Bloc<PreferencesEvent, PreferencesState> {
   Stream<PreferencesState> mapEventToState(
     PreferencesEvent event,
   ) async* {
-    print(event.runtimeType);
     if (event is GetSyncSetting) {
       var sharedPreferences = await _sharedPreferences;
       bool isOn = sharedPreferences.getBool(syncKey) ?? false;
