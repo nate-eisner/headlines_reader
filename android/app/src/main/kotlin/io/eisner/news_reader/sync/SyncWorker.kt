@@ -16,6 +16,7 @@ class SyncWorker(context: Context, private val workerParameters: WorkerParameter
 
 
     override fun doWork(): Result {
+        Log.d("NEWS", "STARTING WORK")
         val retrofit: Retrofit = Retrofit.Builder()
                 .baseUrl("https://newsapi.org/v2/")
                 .addConverterFactory(MoshiConverterFactory.create())
@@ -37,6 +38,7 @@ class SyncWorker(context: Context, private val workerParameters: WorkerParameter
                     db.articleDao().deleteAll(*db.articleDao().getAll().toTypedArray())
                     db.articleDao().insertAll(*articles.toTypedArray())
                     db.close()
+                    Log.d("NEWS", "WORK COMPLETE")
                     return Result.success()
                 }
             }

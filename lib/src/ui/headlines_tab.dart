@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_reader/src/bloc/news/bloc.dart';
 import 'package:news_reader/src/data/article.dart';
@@ -12,7 +13,7 @@ class HeadlinesTab extends StatefulWidget {
 }
 
 class _HeadlinesTabState extends State<HeadlinesTab>
-    with AutomaticKeepAliveClientMixin {
+    with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
   NewsBloc _newsBloc;
   List<Article> _news = [];
 
@@ -22,6 +23,21 @@ class _HeadlinesTabState extends State<HeadlinesTab>
 
     _newsBloc = BlocProvider.of<NewsBloc>(context)
       ..dispatch(GetHeadlines(true));
+
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _newsBloc.dispatch(GetHeadlines(false));
+    }
   }
 
   @override
