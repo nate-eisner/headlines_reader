@@ -14,7 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'bloc/preferences/bloc.dart';
 
-const syncChannel = const MethodChannel('io.eisner.new_reader');
+const syncChannel = const MethodChannel('io.eisner.news_sync');
 
 class MyApp extends StatefulWidget {
   final Config config;
@@ -73,13 +73,15 @@ class _MyAppState extends State<MyApp> {
         title: 'News Reader',
         debugShowCheckedModeBanner: false,
         darkTheme: ThemeData(
-          brightness: Brightness.dark,
-          accentColor: Colors.orange,
-        ),
+            brightness: Brightness.dark,
+            accentColor: Colors.orange,
+            snackBarTheme:
+                SnackBarThemeData(behavior: SnackBarBehavior.floating)),
         theme: ThemeData(
-          brightness: Brightness.light,
-          primarySwatch: Colors.deepOrange,
-        ),
+            brightness: Brightness.light,
+            primarySwatch: Colors.deepOrange,
+            snackBarTheme:
+                SnackBarThemeData(behavior: SnackBarBehavior.floating)),
         home: BlocListener(
             bloc: _preferencesBloc,
             listener: (context, state) {
